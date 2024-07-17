@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load  static %}
+
+{% block content %}
+
+{% include "includes/header.html" %}
+
+<div class="grid-container">
+    <div class="grid-x grid-margin-x align-center" style="margin-top: 1em;">
+        <!-- bloque de datos de usuario -->
+        <div class="cell small-12 large-4">
+            <div class="callout">
+                <h5>{{user.full_name}}</h5>
+                <p>{{user.email}} - {{user.ocupation}} - {{user.date_birth}}</p>
+                <a href="#">Editar Datos</a>
+                <p>
+                    <a href="{% url 'users_app:user-logout' %}" class="clear button secondary">salir</a>
+                </p>
+               
+            </div>
+        </div>
+        <!-- FIN bloque de datos de usuario -->
+
+
+        <!-- bloque de articulos favoritos de usuario -->
+        <div class="cell large-8 grid-x grid-margin-x align-center">
+            
+            {% for item in entradas_user %}
+            <div class="cell small-12">
+                <div class="card-favoritos" style="border: 1px solid #ccc; padding: 10px; margin-bottom:3px;">
+                    <img class="card-favoritos-img" src="{{item.entry.image.url}}">
+                    <div class="card-favoritos-body">
+                        <h3 class="card-favoritos-body-titulo">{{item.entry.title}}</h3>
+                        <p class="card-favoritos-body-text">{{item.entry.resume}}</p>
+                        <form class="card-favoritos-body-actions" action="{% url 'favoritos_app:delete-favoritos' item.id %}"  method="POST">{% csrf_token %}
+                            <a class="button warning" href="{% url 'entrada_app:entrada-detail' item.entry.id %}">Ver</a>
+                            <button type="submit" class="button alert">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- FIN bloque de articulos favoritos de usuario -->
+    </div>
+</div>
+{% include "includes/footer.html" %}
+
+{% endblock content %}
